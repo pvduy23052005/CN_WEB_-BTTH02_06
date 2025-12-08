@@ -1,5 +1,7 @@
 @extends('layout.layoutAdmin')
 
 @section('main-content')
-    <h1>dashboard admin</h1>
+  <div class="main-content">
+    <h1>dashboard</h1>
+  </div>
 @endsection

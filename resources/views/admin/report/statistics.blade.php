@@ -1,5 +1,7 @@
 @extends('layout.layoutAdmin')
 
 @section('main-content')
-    <h1>Report</h1>
+  <div class="main-content">
+    <h1>report</h1>
+  </div>
 @endsection

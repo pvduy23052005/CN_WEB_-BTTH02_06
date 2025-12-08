@@ -11,6 +11,7 @@
 </head>
 <body>
   @include('layout.sidebar')
+  @include('layout.headerAdmin')
   @yield('main-content')
   <script src="{{ asset('js/script.js') }}"></script>
 </body>
