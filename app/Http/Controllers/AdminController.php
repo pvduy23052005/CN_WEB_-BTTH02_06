@@ -21,11 +21,37 @@ class AdminController extends Controller
   public function category(){
 
     $categories = Category::where("deleted" , 0)->get();
-    
-
+  
     return view('admin.categories.list' , [
       "title" => "Categories",
       "categories" => $categories,
     ]);
   }
+
+  // [get] /admin/category/create
+  public function create(Request  $request  ){
+    return view('admin.categories.create' , [
+      "title" => "Create category",
+    ]);
+  }
+
+  // [post] /admin/category/create
+  public function createPost(Request $request)
+  {
+    $validated = $request->validate([
+      'name' => 'required|string|max:255',
+      'description' => 'nullable|string',
+    ]);
+
+    Category::create([
+      'name' => $validated['name'],
+      'description' => $validated['description'] ?? null,
+      'created_at' => now(),
+      'deleted' => 0,
+    ]);
+
+    return redirect('/admin/category');
+  }
+
+
 }

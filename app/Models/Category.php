@@ -8,6 +8,7 @@ class Category extends Model
 {
     protected $table = 'categories';
     protected $fillable = ['name', 'description', 'created_at', 'deleted'];
+    public $timestamps = false; 
 
     public function courses()
     {
