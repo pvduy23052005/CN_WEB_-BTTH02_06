@@ -13,8 +13,10 @@ class AdminController extends Controller
   // [get] /admin/dashboard . 
   public function index(Request $request, Response $response)
   {
+    $courses = Category::where("deleted" , 0)->get();
     return view('admin.dashboard', [
       "title" => "Dashboard admin",
+      "courses" => $courses,
     ]);
   }
 
