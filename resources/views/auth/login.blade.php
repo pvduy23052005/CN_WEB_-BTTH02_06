@@ -356,14 +356,10 @@
       </div>
 
       <!-- Login Form -->
-<<<<<<< HEAD
-      <form id="loginForm" action="/auth/login" method="POST">
-=======
       <form id="loginForm"
         action ="/auth/login"
         method = "POST"
         >
->>>>>>> 9a5e6c6140ecc507c5c316001ff2cbd84cdc2187
         @csrf
         {{-- email --}}
         <div class="form-group">
