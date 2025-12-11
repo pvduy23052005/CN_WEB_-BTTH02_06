@@ -1,67 +1,51 @@
-<footer>
-    
-        <div class="footer__content">
-            <div class="footer__item">
-                <h3>About Us</h3>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ad soluta error minima repudiandae ex iure
-                    iusto animi. Tempora, dolor quo!</p>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ad soluta error minima repudiandae ex iure
-                    iusto animi. Tempora, dolor quo!</p>
-                <div class="footer__socials">
-                    <i class="fab fa-facebook-f"></i>
-                    <i class="fab fa-twitter"></i>
-                    <i class="fab fa-google-plus"></i>
-                </div>
+<footer class="footer">
+    <div class="footer-container">
+
+        <div class="footer-item">
+            <h3 class="footer-logo"><span>EduPro</span></h3>
+            <p class="footer-desc">
+                Nền tảng học tập trực tuyến hàng đầu, kết nối học viên với những giảng viên chuyên nghiệp nhất.
+            </p>
+        </div>
+
+        <div class="footer-item">
+            <h4 class="footer-title">Liên kết nhanh</h4>
+            <ul class="footer-list">
+                <li><a href="#">Trang chủ</a></li>
+                <li><a href="#">Tất cả khóa học</a></li>
+                <li><a href="#">Trở thành giảng viên</a></li>
+                <li><a href="#">Blog</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-item">
+            <h4 class="footer-title">Hỗ trợ</h4>
+            <ul class="footer-list">
+                <li><a href="#">Trung tâm trợ giúp</a></li>
+                <li><a href="#">Điều khoản sử dụng</a></li>
+                <li><a href="#">Chính sách bảo mật</a></li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-item">
+            <h4 class="footer-title">Kết nối</h4>
+
+            <div class="footer-socials">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
             </div>
-            <div class="footer__item">
-                <h3>Working Time</h3>
-                <div class="foot__time">
-                    <p>Monday</p>
-                    <p>9h30-18h30</p>
-                </div>
-                <div class="foot__time">
-                    <p>Tuesday</p>
-                    <p>9h30-18h30</p>
-                </div>
-                <div class="foot__time">
-                    <p>Wednesday</p>
-                    <p>9h30-18h30</p>
-                </div>
-                <div class="foot__time">
-                    <p>Thursday</p>
-                    <p>9h30-18h30</p>
-                </div>
-                <div class="foot__time">
-                    <p>Friday</p>
-                    <p>9h30-18h30</p>
-                </div>
-                <div class="foot__time">
-                    <p>Saturday</p>
-                    <p>9h30-18h30</p>
-                </div>
-                <div class="foot__time">
-                    <p>Sunday</p>
-                    <p>9h30-18h30</p>
-                </div>
-            </div>
-            <div class="footer__item">
-                <h3>Twitter Us</h3>
-                <p>Lorem ipsum dolor sit amet consectetur.</p>
-                <p>Lorem ipsum dolor sit amet consectetur.</p>
-                <p>Lorem ipsum dolor sit amet consectetur.</p>
-                <p>Lorem ipsum dolor sit amet consectetur.</p>
-            </div>
-            <div class="footer__item">
-                <h3>SUBCRIBE US</h3>
-                <form action="">
-                    <input type="email" placeholder="name@exmple.com">
-                    <button type="submit">Send</button>
-                </form>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusantium nisi nemo esse eos beatae nulla
-                    animi dolorum, a distinctio id!</p>
+
+            <div class="footer-email">
+                <i class="fas fa-envelope"></i>
+                <span>contact@edupro.com</span>
             </div>
         </div>
-        <p class="footer__conpyright">&copy; 2020 Lorem ipsum dolor sit amet consectetur. | Design by
-            <span>QuyyDuongg</span>
-        </p>
-    </footer>
+
+    </div>
+
+    <div class="footer-copy">
+        © 2025 EduPro LMS. All rights reserved.
+    </div>
+</footer>

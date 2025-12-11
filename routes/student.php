@@ -1,13 +1,15 @@
-
-
 <?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
-// Bạn có thể giữ hoặc bỏ HomeController tùy theo nhu cầu sử dụng route khác
+use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\LessonController;
 
-// Đặt route cho trang Tiến độ khóa học
-Route::get(
-    '/my_courses',
-    [CourseController::class, "showMyCourses"]
-);
+Route::get('/', [CourseController::class, 'showMyCourses'])->name('home');
+
+Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.detail');
+Route::post('/enroll/{courseId}', [EnrollmentController::class, 'enroll'])->name('enroll');
+Route::get('/learn/{lessonId}', [LessonController::class, 'showLesson'])->name('learn');
+Route::get('/progress/{courseId}', [EnrollmentController::class, 'showProgress'])->name('progress');
+
