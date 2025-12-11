@@ -1,0 +1,185 @@
+@import url('./base.css');
+.edu-header {
+    width: 100%;
+    padding: 12px 40px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* LOGO */
+.edu-logo {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f2936;
+    gap: 8px;
+}
+
+.edu-logo i {
+    font-size: 28px;
+    color: #FF6280;
+}
+
+/* SEARCH BAR */
+.edu-search {
+    flex: 1;
+    max-width: 420px;
+    position: relative;
+}
+
+.edu-search input {
+    width: 100%;
+    padding: 10px 40px 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.edu-search input:focus {
+    outline: none;
+    border-color: #FF6280;
+}
+
+.edu-search i {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777;
+}
+
+/* NAV RIGHT */
+.edu-nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.menu-item {
+    color: #1f2936;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.menu-item:hover {
+    color: #FF6280;
+}
+
+/* NOTIFY */
+.notify {
+    position: relative;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.notify i {
+    color: #1f2936;
+}
+
+.notify .badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: #FF6280;
+    color: white;
+    font-size: 10px;
+    padding: 3px 6px;
+    border-radius: 50%;
+}
+
+/* ACCOUNT DROPDOWN */
+.account {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.account img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.account span {
+    font-weight: 600;
+    color: #1f2936;
+}
+
+/* MOBILE (ẩn menu) */
+@media (max-width: 900px) {
+    .edu-nav {
+        display: none;
+    }
+
+    .edu-search {
+        max-width: 100%;
+    }
+}
+/* Dropdown container */
+.dropdown {
+    position: relative;
+}
+
+/* Menu item */
+.dropdown .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 200px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    display: none;
+    padding: 8px 0;
+    z-index: 50;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 10px 16px;
+    color: #1f2936;
+    font-size: 14px;
+    transition: 0.25s;
+}
+
+.dropdown-menu li a:hover {
+    background: #FFE1E8;
+    color: #FF6280;
+}
+
+/* Hover xuất hiện menu */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+.account {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+}
+
+.account img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ddd;
+}

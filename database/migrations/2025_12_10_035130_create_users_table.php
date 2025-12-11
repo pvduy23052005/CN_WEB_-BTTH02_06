@@ -22,7 +22,7 @@ return new class extends Migration
       $table->string('fullname', 255)->nullable(); // Giả sử có thể null
 
       // Trường INTEGER
-      $table->integer('role')->default(1); // Giả sử có giá trị mặc định
+      $table->integer('role')->default(0); // Giả sử có giá trị mặc định
 
       // Trường BIT (Boolean)
       $table->boolean('deleted')->default(false);
@@ -34,6 +34,6 @@ return new class extends Migration
 
   public function down(): void
   {
-    Schema::dropIfExists('user');
+    Schema::dropIfExists('users');
   }
 };
