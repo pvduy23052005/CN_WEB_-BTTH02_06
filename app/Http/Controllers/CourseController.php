@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use Illuminate\Http\Response;
 use App\Models\Course;
 use App\Models\Category;
@@ -38,6 +39,7 @@ class CourseController extends Controller
             'title' => 'Thêm khóa học',
             'categories' => $categories,
             'instructors' => $instructors
+
         ]);
     }
 
@@ -57,6 +59,7 @@ class CourseController extends Controller
 {
     $course = Course::find($id);
     
+
     // Nếu không tìm thấy khóa học thì báo lỗi 404
     if (!$course) {
         return redirect()->route('courses.index')->with('msg', 'Không tìm thấy khóa học!');
@@ -92,3 +95,4 @@ class CourseController extends Controller
     }
   
 }
+

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+
+
 class AuthController extends Controller
 {
   // [get] /auth/login
@@ -35,7 +37,6 @@ class AuthController extends Controller
       session(['user_name' => $user->fulname]);
       return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
     }
-
     return redirect("/auth/login");
   }
 
