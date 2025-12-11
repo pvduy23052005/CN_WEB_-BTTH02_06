@@ -6,8 +6,7 @@
 
 @section('main-content')
     <div class="container my-5">
-        <h1 class="mb-4 text-primary"><i class="fas fa-chart-line me-2"></i> Tiến độ Khóa học: {{ $course->title }}</h1>
-        
+<h1 class="mb-4 text-primary"><i class="fas fa-chart-line me-2"></i> Tiến độ Khóa học: {{ $enrollment->course->course_name ?? $enrollment->course->title }}</h1>        
         {{-- Nút Quay lại --}}
         <p class="text-muted small">
             <a href="{{ route('student.home') }}"><i class="fas fa-chevron-left"></i> Quay lại Khóa học của tôi</a>
