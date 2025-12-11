@@ -356,7 +356,7 @@
 
       <!-- Login Form -->
       <form id="loginForm"
-        action ="/auth1/login"
+        action ="/auth/login"
         method = "POST"
         >
         @csrf
