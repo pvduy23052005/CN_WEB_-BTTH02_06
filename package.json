@@ -3,7 +3,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "start": "php artisan serve",
+        "start" : "php artisan serve",
         "build": "vite build",
         "dev": "vite"
     },

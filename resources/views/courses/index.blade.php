@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {{-- File: resources/views/courses/index.blade.php --}}
 
 @extends('layout.layoutSinhVien') 
@@ -53,4 +54,3 @@
             {{ $courses->links() }}
         </div>
     </div>
-@endsection

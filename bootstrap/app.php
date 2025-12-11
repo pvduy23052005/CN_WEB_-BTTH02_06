@@ -22,6 +22,18 @@ return Application::configure(basePath: dirname(__DIR__))
         ->prefix('student')
         ->name('student.')
         ->group(base_path('routes/student.php'));
+
+      // instructor
+      Route::middleware('web')
+        ->prefix('instructor')
+        ->name('instructor.')
+        ->group(base_path('routes/instructor.php'));
+      
+      // auth
+      Route::middleware('web')
+        ->prefix('auth')
+        ->name('auth.')
+        ->group(base_path('routes/auth.php'));
     }
   )
   ->withMiddleware(function (Middleware $middleware): void {
