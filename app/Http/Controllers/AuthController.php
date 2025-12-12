@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-
-
+use Illuminate\Support\Facades\Auth; // <-- CẦN THÊM DÒNG NÀY ĐỂ DÙNG Auth::attempt
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
@@ -16,28 +16,44 @@ class AuthController extends Controller
   }
 
   // [post] /auth/login
-  public function loginPost(Request $request)
+  public function loginPost1(Request $request)
   {
+    // 1. Validate dữ liệu
     $request->validate([
       'email' => 'required|email',
       'password' => 'required|min:6'
-    ],);
+    ]);
 
-    dd($request->all());
 
-    $user = User::where('email', $request->email)
-      ->where('password', $request->password)
-      ->first();
+    // 2. TẠO THÔNG TIN XÁC THỰC
+    $user = User::where('email', $request->email)->first();
+    // 3. XÁC THỰC BẰNG HASHING CHUẨN CỦA LARAVEL
+    if ($user && $user->password === $request->password) {
 
-    echo $user;
+      // XÁC THỰC THÀNH CÔNG
+      Auth::login($user);
 
-    if ($user) {
-      session(['user_id' => $user->id]);
-      session(['user_email' => $user->email]);
-      session(['user_name' => $user->fulname]);
-      return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
+      if ($user->role == 0) {
+        // Học viên: Chuyển hướng đến Dashboard/Home học viên
+        return redirect()->route('student.home')->with('success', 'Đăng nhập thành công!');
+      }
+
+      if ($user->role == 1) {
+        // Giảng viên: Chuyển hướng đến Dashboard giảng viên (admin/dashboard)
+        return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
+      }
+
+      if ($user->role == 2) {
+        // Giảng viên: Chuyển hướng đến Dashboard giảng viên (admin/dashboard)
+        return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
+      }
+
+      // Trường hợp lỗi role:
+      return redirect('/')->with('error', 'Đăng nhập thành công, nhưng không có quyền truy cập.');
     }
-    return redirect("/auth/login");
+
+    // XÁC THỰC THẤT BẠI
+    return back()->with('error', 'Email hoặc mật khẩu không chính xác.');
   }
 
   // [get] /auth/register

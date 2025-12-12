@@ -13,8 +13,8 @@ Route::get(
 
 // [post] /auth/login
 Route::post(
-  "/login" ,
-  [AuthController::class , "loginPost"]
+  "/login",
+  [AuthController::class, "loginPost1"]
 );
 
 // [get] /auth/register
