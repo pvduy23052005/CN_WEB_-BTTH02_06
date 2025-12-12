@@ -22,7 +22,9 @@ class CourseController extends Controller
     $category_id = $request->get('category');
     
     // Khởi tạo truy vấn và Eager Load (instructor, category)
-    $query = Course::with('instructor', 'category')->where("is_deleted", 0);
+    $query = Course::with('instructor', 'category')
+                   ->where("is_deleted", 0)
+                   ->where("is_active", 1);
 
     // Áp dụng Tìm kiếm
     if ($search) {
@@ -65,7 +67,7 @@ class CourseController extends Controller
     $isEnrolled = false;
     if (auth()->check()) {
         // Kiểm tra xem người dùng đã đăng nhập có enrollment cho khóa học này không
-        $isEnrolled = Enrollment::where('user_id', auth()->id())
+        $isEnrolled = Enrollment::where('student_id', auth()->id())
                                 ->where('course_id', $id)
                                 ->exists();
     }
@@ -93,25 +95,22 @@ class CourseController extends Controller
         return view('students.my_courses', compact('enrollments'));
     }
 
-
-
-
-
-  
- 
   //Phần của giảng viên
 
-    // [GET] /instructor/courses
+   // [GET] /instructor/courses
     public function index()
     {
-        // CHỈNH SỬA: Chỉ lấy các khóa học của giảng viên có ID = 2
-        $courses = Course::where('instructor_id', 2)
+        // Lấy ID của giảng viên đang đăng nhập
+        $instructorId = Auth::id();
+
+        // Chỉ lấy các khóa học của giảng viên ĐANG ĐĂNG NHẬP
+        $courses = Course::where('instructor_id', $instructorId)
             ->where("is_deleted", 0)
             ->orderBy('id', 'desc')
             ->get();
         
         return view('instructor.course.index', [
-            "title" => "Quản lý khóa học (GV ID: 2)",
+            "title" => "Quản lý khóa học của tôi",
             "courses" => $courses
         ]);
     }
@@ -138,8 +137,8 @@ class CourseController extends Controller
 
         $data = $request->except('image');
 
-        // --- FIX CỨNG USER ID = 2 ---
-        $data['instructor_id'] = 2; 
+        // --- GÁN CHO GIẢNG VIÊN ĐANG LOGIN ---
+        $data['instructor_id'] = Auth::id(); 
         
         $data['is_deleted'] = 0;
 
@@ -159,11 +158,11 @@ class CourseController extends Controller
     // [GET] /instructor/courses/{id}/edit
     public function edit($id)
     {
-        // Tìm khóa học
         $course = Course::find($id);
+        $currentUserId = Auth::id(); // Lấy ID người đang login
 
-        // CHỈNH SỬA: Kiểm tra thêm điều kiện instructor_id phải bằng 2
-        if (!$course || $course->is_deleted == 1 || $course->instructor_id != 2) {
+        // Kiểm tra: Khóa học phải tồn tại, chưa xóa VÀ thuộc về người đang login
+        if (!$course || $course->is_deleted == 1 || $course->instructor_id != $currentUserId) {
             return redirect()->route('instructor.courses.index')->with('msg', 'Bạn không có quyền sửa khóa học này!');
         }
 
@@ -180,9 +179,10 @@ class CourseController extends Controller
     public function update(Request $request, $id)
     {
         $course = Course::find($id);
+        $currentUserId = Auth::id();
 
-        // CHỈNH SỬA: Kiểm tra quyền sở hữu (ID = 2)
-        if (!$course || $course->instructor_id != 2) {
+        // Kiểm tra quyền sở hữu
+        if (!$course || $course->instructor_id != $currentUserId) {
             return redirect()->route('instructor.courses.index')->with('msg', 'Lỗi: Khóa học không tồn tại hoặc không đủ quyền.');
         }
 
@@ -213,9 +213,10 @@ class CourseController extends Controller
     public function destroy($id)
     {
         $course = Course::find($id);
+        $currentUserId = Auth::id();
 
-        // CHỈNH SỬA: Kiểm tra quyền sở hữu (ID = 2)
-        if ($course && $course->instructor_id == 2) {
+        // Kiểm tra quyền sở hữu trước khi xóa
+        if ($course && $course->instructor_id == $currentUserId) {
             // XÓA MỀM
             $course->update(['is_deleted' => 1]);
             return redirect()->route('instructor.courses.index')->with('msg', 'Đã xóa khóa học thành công!');

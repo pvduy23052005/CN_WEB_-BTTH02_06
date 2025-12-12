@@ -1,18 +1,35 @@
 {{-- File: resources/views/students/course_progress.blade.php --}} 
-{{-- (Sử dụng tên file thống nhất, thay cho cours_progress) --}}
 
 @extends('layout.layoutSinhVien') 
 @section('title', 'Tiến độ Khóa học')
 
 @section('main-content')
     <div class="container my-5">
-<h1 class="mb-4 text-primary"><i class="fas fa-chart-line me-2"></i> Tiến độ Khóa học: {{ $enrollment->course->course_name ?? $enrollment->course->title }}</h1>        
-        {{-- Nút Quay lại --}}
+
+        
+        @php
+            // $lessons là Collection các bài học trong khóa (được truyền từ Controller)
+            $totalLessonsCount = $lessons->count(); 
+            
+            // $completedLessonIds là mảng ID các bài đã hoàn thành
+            $completedLessonsCount = count($completedLessonIds ?? []); 
+            
+            // Đặt màu dựa trên tiến độ: success nếu 100%
+            $progress_class = ($progressPercentage ?? 0) == 100 ? 'bg-success' : 'bg-info';
+
+            
+            $firstLesson = $lessons->sortBy('order')->first();
+            $firstLessonId = $firstLesson ? $firstLesson->id : null;
+        @endphp
+        
+        <h1 class="mb-4 text-primary"><i class="fas fa-chart-line me-2"></i> Tiến độ Khóa học: {{ $enrollment->course->course_name ?? $enrollment->course->title }}</h1> 
+        
+        
         <p class="text-muted small">
             <a href="{{ route('student.home') }}"><i class="fas fa-chevron-left"></i> Quay lại Khóa học của tôi</a>
         </p>
 
-        {{-- Hiển thị thông báo flash message --}}
+       
         @if (session('success'))
             <div class="alert alert-success mt-3"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
         @endif
@@ -20,14 +37,10 @@
         {{-- Tổng quan Tiến độ --}}
         <div class="card mb-4 shadow-sm border-0">
             <div class="card-body">
-                <h4 class="card-title text-secondary">
-                    Tổng quan: {{ $completedLessons ?? 0 }} / {{ $totalLessons ?? 0 }} bài đã hoàn thành
-                </h4>
                 
-                @php
-                    // Đặt màu dựa trên tiến độ: success nếu 100%
-                    $progress_class = ($progressPercentage ?? 0) == 100 ? 'bg-success' : 'bg-info';
-                @endphp
+                <h4 class="card-title text-secondary">
+                    Tổng quan: {{ $completedLessonsCount }} / {{ $totalLessonsCount }} bài đã hoàn thành
+                </h4>
                 
                 <div class="progress mb-3" style="height: 30px;">
                     <div class="progress-bar {{ $progress_class }}" role="progressbar" style="width: {{ $progressPercentage ?? 0 }}%;">
@@ -36,8 +49,29 @@
                 </div>
                 
                 @if (($progressPercentage ?? 0) == 100)
-                    <div class="alert alert-success text-center mt-3">Xin chúc mừng! Bạn đã hoàn thành khóa học này.</div>
+                    <div class="alert alert-success text-center mt-3 d-flex justify-content-center align-items-center">
+                        <span class="me-4">Xin chúc mừng! Bạn đã hoàn thành khóa học này.</span>
+                        
+                        {{-- NÚT XEM LẠI/HỌC LẠI --}}
+                        @if ($firstLessonId)
+                            <a href="{{ route('student.learn', $firstLessonId) }}" class="btn btn-sm btn-success">
+                                <i class="fas fa-redo"></i> Xem lại Khóa học
+                            </a>
+                        @endif
+                    </div>
                 @endif
+                
+                {{-- KHỐI TIẾP TỤC HỌC (Nếu chưa hoàn thành 100%) --}}
+                @if (($progressPercentage ?? 0) < 100 && $totalLessonsCount > 0)
+                    {{-- Giả định Controller đã tính toán và truyền $nextLessonId --}}
+                    {{-- Hoặc bạn cần tìm bài học CHƯA hoàn thành đầu tiên để thay thế vào route('student.learn', $nextLessonId) --}}
+                    <div class="alert alert-info text-center mt-3">
+                        <a href="{{ route('student.learn', $firstLessonId) }}" class="btn btn-primary">
+                            <i class="fas fa-play-circle"></i> Tiếp tục học
+                        </a>
+                    </div>
+                @endif
+                
             </div>
         </div>
 
@@ -45,9 +79,7 @@
         <div class="list-group shadow-sm">
             @forelse ($lessons->sortBy('order') as $lesson)
                 @php
-                    // SỬ DỤNG LOGIC TỪ CONTROLLER: Kiểm tra ID bài học trong mảng đã hoàn thành
                     $isCompleted = in_array($lesson->id, $completedLessonIds ?? []); 
-                    // Thêm class 'disabled' để làm mờ bài đã hoàn thành
                     $item_class = $isCompleted ? 'bg-light text-muted' : ''; 
                 @endphp
 
@@ -59,6 +91,10 @@
                     <div>
                         @if ($isCompleted)
                             <span class="badge bg-success me-3"><i class="fas fa-check-circle"></i> Đã hoàn thành</span>
+                            {{-- THÊM NÚT XEM LẠI BÀI HỌC ĐÃ HOÀN THÀNH --}}
+                            <a href="{{ route('student.learn', $lesson->id) }}" class="btn btn-sm btn-secondary">
+                                Xem lại
+                            </a>
                         @else
                             <a href="{{ route('student.learn', $lesson->id) }}" class="btn btn-sm btn-primary">
                                 <i class="fas fa-play-circle"></i> Bắt đầu học

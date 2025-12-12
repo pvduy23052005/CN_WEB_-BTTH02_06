@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Middleware/RoleMiddleware.php
-
 namespace App\Http\Middleware;
 
 use Closure;
@@ -11,28 +9,32 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle(Request $request, Closure $next, $role): Response // <-- Nhận tham số $role
-    {
-        // 1. Kiểm tra người dùng đã đăng nhập chưa
-        if (!Auth::check()) {
-            return redirect('/auth/login'); // Chuyển về trang đăng nhập nếu chưa
-        }
-
-        $user = Auth::user();
-
-        // 2. Kiểm tra vai trò (role)
-        // Nếu role của người dùng KHÔNG khớp với role yêu cầu
-        if ($user->role != $role) {
-            // Có thể chuyển hướng đến trang lỗi 403 hoặc trang chủ
-            return redirect('/')->with('error', 'Bạn không có quyền truy cập chức năng này.');
-        }
-
-        // Nếu khớp role, tiếp tục xử lý request
-        return $next($request);
+  /**
+   * Handle an incoming request.
+   *
+   * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+   * @param  mixed ...$roles  Nhận nhiều role (0, 1, 2)
+   */
+  public function handle(Request $request, Closure $next, ...$roles): Response
+  {
+    // 1. Kiểm tra đã đăng nhập chưa
+    if (!Auth::check()) {
+      return redirect('/auth/login')->with('error', 'Vui lòng đăng nhập.');
     }
+
+    // 2. Lấy user hiện tại
+    $user = Auth::user();
+
+    // 3. Convert roles từ string sang integer
+    // Vì từ route truyền vào là string: 'role:0,1,2'
+    $allowedRoles = array_map('intval', $roles);
+
+    // 4. Kiểm tra user có role phù hợp không
+    if (in_array($user->role, $allowedRoles)) {
+      return $next($request); // Cho phép truy cập
+    }
+
+    // 5. Nếu không đủ quyền
+    abort(403, 'Bạn không có quyền truy cập trang này.');
+  }
 }

@@ -4,59 +4,114 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // <-- CẦN THÊM DÒNG NÀY ĐỂ DÙNG Auth::attempt
+use Illuminate\Support\Facades\Auth; 
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    // [get] /auth/login
-    public function login()
-    {
-        return view("auth.login");
+  // [get] /auth/login
+  public function login()
+  {
+    return view("auth.login");
+  }
+
+  // [post] /auth/login
+  public function loginPost1(Request $request)
+  {
+    // 1. Validate dữ liệu
+    $request->validate([
+      'email' => 'required|email',
+      'password' => 'required|min:6'
+    ]);
+
+
+    // 2. TẠO THÔNG TIN XÁC THỰC
+    $user = User::where('email', $request->email)->first();
+    // 3. XÁC THỰC BẰNG HASHING CHUẨN CỦA LARAVEL
+    if ($user && $user->password === $request->password) {
+
+      // XÁC THỰC THÀNH CÔNG
+      Auth::login($user);
+
+      if ($user->role == 0) {
+        // Học viên: Chuyển hướng đến Dashboard/Home học viên
+        return redirect()->route('student.home')->with('success', 'Đăng nhập thành công!');
+      }
+
+      if ($user->role == 1) {
+        // Giảng viên: Chuyển hướng đến Dashboard giảng viên (admin/dashboard)
+        return redirect('instructor/courses')->with('success', 'Đăng nhập thành công!');
+      }
+
+      if ($user->role == 2) {
+        // Giảng viên: Chuyển hướng đến Dashboard giảng viên (admin/dashboard)
+        return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
+      }
+
+      // Trường hợp lỗi role:
+      return redirect('/')->with('error', 'Đăng nhập thành công, nhưng không có quyền truy cập.');
     }
 
-    // [post] /auth/login
-    public function loginPost(Request $request)
-    {
-        // 1. Validate dữ liệu
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6'
-        ]);
+    // XÁC THỰC THẤT BẠI
+    return back()->with('error', 'Email hoặc mật khẩu không chính xác.');
+  }
 
-        // XÓA LỆNH DD NÀY ĐI
-        // dd($request->all()); 
-        
-        // 2. TẠO THÔNG TIN XÁC THỰC
-        $credentials = $request->only('email', 'password');
+  // [get] /auth/register
+  public function register()
+  {
+    return view("auth.register");
+  }
 
-        // 3. XÁC THỰC BẰNG HASHING CHUẨN CỦA LARAVEL
-        if (Auth::attempt($credentials)) {
-            
-            // XÁC THỰC THÀNH CÔNG
-            $user = Auth::user();
 
-            // CHUYỂN HƯỚNG DỰA TRÊN ROLE
-            if ($user->role == 0) {
-                // Học viên: Chuyển hướng đến Dashboard/Home học viên
-              return redirect()->route('student.home')->with('success', 'Đăng nhập thành công!');            }
+  public function registerPost(Request $req)
+  {
+    // Kiểm tra email đã tồn tại chưa
+    if (User::where('email', $req->email)->exists()) {
+      return back()->withErrors(['email' => 'Email đã được sử dụng!'])->withInput();
 
-            if ($user->role == 1) {
-                // Giảng viên: Chuyển hướng đến Dashboard giảng viên (admin/dashboard)
-                return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
-            }
-            
-            // Trường hợp lỗi role:
-            return redirect('/')->with('error', 'Đăng nhập thành công, nhưng không có quyền truy cập.');
-
-        } 
-        
-        // XÁC THỰC THẤT BẠI
-        return back()->with('error', 'Email hoặc mật khẩu không chính xác.');
     }
 
-    // [get] /auth/register
-    public function register()
-    {
-        return view("auth.register");
+    // Kiểm tra username đã tồn tại chưa
+    if (User::where('username', $req->username)->exists()) {
+      return back()->withErrors(['username' => 'Tên đăng nhập đã tồn tại!'])->withInput();
     }
+
+
+    // Validate các trường khác
+    $validated = $req->validate([
+      'fullname' => 'required|string|max:255',
+      'email' => 'required|email',
+      'username' => 'required|string|min:3',
+      'password' => 'required|min:6|confirmed',
+      'role' => 'required|in:0,1,2',
+    ]);
+
+    // Tạo user
+    User::create([
+      'fullname' => $validated['fullname'],
+      'email' => $validated['email'],
+      'username' => $validated['username'],
+      'password' => $validated['password'],
+      'role' => $validated['role'],
+    ]);
+
+    return redirect('/auth/login')->with('success', 'Đăng ký thành công!');
+  }
+
+
+  public function logout(Request $request)
+{
+    // Đăng xuất người dùng hiện tại
+    Auth::logout();
+
+    // Hủy session của người dùng
+    $request->session()->invalidate();
+
+    // Tái tạo token CSRF mới
+    $request->session()->regenerateToken();
+
+    // Chuyển hướng người dùng về trang đăng nhập hoặc trang chủ
+    return redirect('/auth/login')->with('success', 'Bạn đã đăng xuất thành công.');
 }
+}
+
