@@ -6,7 +6,7 @@ use App\Models\Category;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\User;
-
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -138,9 +138,9 @@ class AdminController extends Controller
   // [get] /admin/report
   public function report()
   {
-    
+
     $totalRevenue = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')
-      ->sum('courses.price'); 
+      ->sum('courses.price');
 
     $totalStudents = User::where('role', 0)->count();
     $newEnrollmentsThisMonth = Enrollment::whereMonth('enrolled_date', date('m'))
@@ -166,5 +166,21 @@ class AdminController extends Controller
       "topCourses" => $topCourses,
       "categoriesStats" => $categoriesStats
     ]);
+  }
+
+  // [post] /admin/logout
+  public function logoutAdmin(Request $request)
+  {
+      // 1. Đăng xuất user hiện tại
+      Auth::logout();
+
+      // 2. Hủy session hiện tại (để không ai dùng lại được)
+      $request->session()->invalidate();
+
+      // 3. Tạo lại CSRF token mới (để bảo mật cho phiên tiếp theo)
+      $request->session()->regenerateToken();
+
+      // 4. Chuyển hướng về trang đăng nhập
+      return redirect('/auth/login')->with('success', 'Đăng xuất thành công!');
   }
 }
