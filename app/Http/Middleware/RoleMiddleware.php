@@ -22,13 +22,9 @@ class RoleMiddleware
       return redirect('/auth/login')->with('error', 'Vui lòng đăng nhập.');
     }
 
-    // 2. Logic kiểm tra quyền nâng cao
-    // Cách hoạt động: 
-    // - Nếu role của user nằm trong danh sách cho phép
-    // - HOẶC nếu user là Admin (role == 2) thì luôn cho qua (Quyền lực tối cao)
-    if (in_array($user->role, $roles) || $user->role == 2) {
-      return $next($request);
-    }
+    // if (in_array($user->role, $roles) || $user->role == 2) {
+    //   return $next($request);
+    // }
 
     // 3. Nếu không đủ quyền
     return redirect('/auth/login')->with('error', 'Bạn không có quyền truy cập trang này.');

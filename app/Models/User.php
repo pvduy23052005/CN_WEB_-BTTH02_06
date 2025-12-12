@@ -2,19 +2,34 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-
-
 class User extends Authenticatable
 {
 
-  
+  protected $fillable = [
+    'fullname',
+    'email',
+    'username',
+    'password',
+    'role',
+    'deleted',
+  ];
 
+  protected $hidden = [
+    'password',
+    'remember_token',
+  ];
+
+  protected $casts = [
+    'email_verified_at' => 'datetime',
+    // BỎ 'password' => 'hashed'
+    'deleted' => 'boolean',
+    'role' => 'integer',
+  ];
 
   protected static function booted()
   {
@@ -22,7 +37,6 @@ class User extends Authenticatable
       $builder->where('deleted', false);
     });
   }
-
 
   public static function withDeleted()
   {
@@ -33,9 +47,9 @@ class User extends Authenticatable
   {
     return $this->hasMany(Enrollment::class, 'user_id');
   }
+
   public function courses()
   {
-    // 'courses' là Model đích, 'enrollments' là tên bảng trung gian
     return $this->belongsToMany(Course::class, 'enrollments', 'user_id', 'course_id');
   }
 
@@ -44,11 +58,11 @@ class User extends Authenticatable
     return $this->hasMany(Course::class, 'instructor_id');
   }
 
-  // Thêm các phương thức tiện ích để kiểm tra vai trò (Role Check)
   public function isAdmin()
   {
     return $this->role === 2;
   }
+
   public function isInstructor()
   {
     return $this->role === 1;
@@ -57,5 +71,15 @@ class User extends Authenticatable
   public function isStudent()
   {
     return $this->role === 0;
+  }
+
+  public function getRoleName()
+  {
+    return match ($this->role) {
+      2 => 'Admin',
+      1 => 'Instructor',
+      0 => 'Student',
+      default => 'Unknown',
+    };
   }
 }

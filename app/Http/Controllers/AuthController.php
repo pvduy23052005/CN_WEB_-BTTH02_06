@@ -61,4 +61,37 @@ class AuthController extends Controller
   {
     return view("auth.register");
   }
+
+  public function registerPost(Request $req)
+  {
+    // Kiểm tra email đã tồn tại chưa
+    if (User::where('email', $req->email)->exists()) {
+      return back()->withErrors(['email' => 'Email đã được sử dụng!'])->withInput();
+    }
+
+    // Kiểm tra username đã tồn tại chưa
+    if (User::where('username', $req->username)->exists()) {
+      return back()->withErrors(['username' => 'Tên đăng nhập đã tồn tại!'])->withInput();
+    }
+
+    // Validate các trường khác
+    $validated = $req->validate([
+      'fullname' => 'required|string|max:255',
+      'email' => 'required|email',
+      'username' => 'required|string|min:3',
+      'password' => 'required|min:6|confirmed',
+      'role' => 'required|in:0,1,2',
+    ]);
+
+    // Tạo user
+    User::create([
+      'fullname' => $validated['fullname'],
+      'email' => $validated['email'],
+      'username' => $validated['username'],
+      'password' => $validated['password'],
+      'role' => $validated['role'],
+    ]);
+
+    return redirect('/auth/login')->with('success', 'Đăng ký thành công!');
+  }
 }

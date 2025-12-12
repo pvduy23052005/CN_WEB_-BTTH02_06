@@ -22,3 +22,9 @@ Route::get(
   '/register',
   [AuthController::class, "register"]
 );
+
+// [post] /auth/register
+Route::post(
+  '/register',
+  [AuthController::class, "registerPost"]
+);
