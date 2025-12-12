@@ -25,6 +25,10 @@ Route::middleware(['auth', 'role:2'])->group(function () {
     Route::post('/edit/{id}', [AdminController::class, 'editPost'])->name('update');
   });
 
+  Route::get('/courses', [AdminController::class, 'listCourses'])->name('courses');
+
+  Route::post("/course/approve/{id}", [AdminController::class, "approveCourse"])->name("course.approve");
+
   // /admin/users -> admin.users
   Route::get('/users', [AdminController::class, 'listUsers'])->name('users');
 });

@@ -22,7 +22,9 @@ class CourseController extends Controller
     $category_id = $request->get('category');
     
     // Khởi tạo truy vấn và Eager Load (instructor, category)
-    $query = Course::with('instructor', 'category')->where("is_deleted", 0);
+    $query = Course::with('instructor', 'category')
+                   ->where("is_deleted", 0)
+                   ->where("is_active", 1);
 
     // Áp dụng Tìm kiếm
     if ($search) {
@@ -93,12 +95,6 @@ class CourseController extends Controller
         return view('students.my_courses', compact('enrollments'));
     }
 
-
-
-
-
-  
- 
   //Phần của giảng viên
 
   // [GET] /instructor/courses

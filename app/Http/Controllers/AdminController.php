@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Course;
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -93,5 +94,24 @@ class AdminController extends Controller
       "title" => "List users",
       "users" => $users,
     ]);
+  }
+
+  // [get] /admin/courses
+  public function listCourses()
+  {
+    $courses = Course::all();
+    return view("admin.courses.index", [
+      "title" => "List courses",
+      "courses" => $courses,
+    ]);
+  }
+
+  public function approveCourse($id)
+  {
+    $course = Course::findOrFail($id);
+    $course->is_active = 1;
+    $course->save();
+
+    return redirect()->route('admin.courses')->with('success', 'Course approved successfully.');
   }
 }
