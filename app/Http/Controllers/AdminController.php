@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Course;
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -13,26 +14,28 @@ class AdminController extends Controller
   // [get] /admin/dashboard . 
   public function index(Request $request, Response $response)
   {
-   
+
     return view('admin.dashboard', [
       "title" => "Dashboard admin"
     ]);
   }
 
   // [get] /admin/category .
-  public function category(){
+  public function category()
+  {
 
-    $categories = Category::where("deleted" , 0)->get();
-  
-    return view('admin.categories.list' , [
+    $categories = Category::where("deleted", 0)->get();
+
+    return view('admin.categories.list', [
       "title" => "Categories",
       "categories" => $categories,
     ]);
   }
 
   // [get] /admin/category/create
-  public function create(Request  $request  ){
-    return view('admin.categories.create' , [
+  public function create(Request  $request)
+  {
+    return view('admin.categories.create', [
       "title" => "Create category",
     ]);
   }
@@ -56,9 +59,10 @@ class AdminController extends Controller
   }
 
   // [get] /admin/category/edit/:id
-  public function edit($id){
+  public function edit($id)
+  {
     $category = Category::findOrFail($id);
-    return view("admin.categories.edit" ,[
+    return view("admin.categories.edit", [
       "title" => "Edit Category",
       "category" => $category,
     ]);
@@ -82,12 +86,32 @@ class AdminController extends Controller
   }
 
   // [get] /admin/users
-  public function listUsers(){
+  public function listUsers()
+  {
     $users = User::all();
 
-    return view("admin.users.manage" , [
-      "title" => "List users" , 
+    return view("admin.users.manage", [
+      "title" => "List users",
       "users" => $users,
     ]);
+  }
+
+  // [get] /admin/courses
+  public function listCourses()
+  {
+    $courses = Course::all();
+    return view("admin.courses.index", [
+      "title" => "List courses",
+      "courses" => $courses,
+    ]);
+  }
+
+  public function approveCourse($id)
+  {
+    $course = Course::findOrFail($id);
+    $course->is_active = 1;
+    $course->save();
+
+    return redirect()->route('admin.courses')->with('success', 'Course approved successfully.');
   }
 }

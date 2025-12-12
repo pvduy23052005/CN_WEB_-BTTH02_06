@@ -1,358 +1,22 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng Ký - Admin Panel</title>
-  <style>
-    :root {
-      --color-text-primary: #1f2936;
-      --color-text-placeholder: #798eae;
-      --color-bg-primary: #f9fafb;
-      --color-bg-secondary: #ececfd;
-      --color-bg-sidebar: #ffffff;
-      --color-border-hr: #e2e8f0;
-      --color-hover-primary: #695cfe;
-      --color-hover-secondary: #e2e2fb;
-      --color-shadow: rgba(0, 0, 0, 0.05);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .register-container {
-      width: 100%;
-      max-width: 480px;
-    }
-
-    .register-card {
-      background-color: var(--color-bg-sidebar);
-      border-radius: 16px;
-      box-shadow: 0 10px 40px var(--color-shadow);
-      padding: 48px 40px;
-      animation: fadeIn 0.5s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .logo-container {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .logo {
-      width: 64px;
-      height: 64px;
-      background: linear-gradient(135deg, var(--color-hover-primary) 0%, #8b7fff 100%);
-      border-radius: 16px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 16px rgba(105, 92, 254, 0.3);
-    }
-
-    .logo svg {
-      width: 32px;
-      height: 32px;
-      color: white;
-    }
-
-    .register-title {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--color-text-primary);
-      margin-bottom: 8px;
-    }
-
-    .register-subtitle {
-      font-size: 14px;
-      color: var(--color-text-placeholder);
-    }
-
-    /* Role Selection */
-    .role-selection {
-      margin-bottom: 28px;
-    }
-
-    .role-buttons {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .role-btn {
-      padding: 16px 12px;
-      border: 2px solid var(--color-border-hr);
-      border-radius: 12px;
-      background-color: var(--color-bg-sidebar);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--color-text-primary);
-    }
-
-    .role-btn:hover {
-      border-color: var(--color-hover-primary);
-      background-color: var(--color-hover-secondary);
-      transform: translateY(-2px);
-    }
-
-    .role-btn.active {
-      border-color: var(--color-hover-primary);
-      background: linear-gradient(135deg, var(--color-hover-primary) 0%, #8b7fff 100%);
-      color: white;
-      box-shadow: 0 4px 12px rgba(105, 92, 254, 0.3);
-    }
-
-    .role-btn svg {
-      width: 24px;
-      height: 24px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--color-text-primary);
-      margin-bottom: 8px;
-    }
-
-    .input-wrapper {
-      position: relative;
-    }
-
-    .input-icon {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
-      color: var(--color-text-placeholder);
-      pointer-events: none;
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 14px 16px 14px 48px;
-      border: 2px solid var(--color-border-hr);
-      border-radius: 10px;
-      font-size: 15px;
-      color: var(--color-text-primary);
-      background-color: var(--color-bg-primary);
-      transition: all 0.3s ease;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--color-hover-primary);
-      background-color: var(--color-bg-sidebar);
-      box-shadow: 0 0 0 4px rgba(105, 92, 254, 0.1);
-    }
-
-    .form-input::placeholder {
-      color: var(--color-text-placeholder);
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--color-text-placeholder);
-      padding: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: color 0.3s ease;
-    }
-
-    .password-toggle:hover {
-      color: var(--color-hover-primary);
-    }
-
-    .password-toggle svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .btn-register {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, var(--color-hover-primary) 0%, #8b7fff 100%);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 16px rgba(105, 92, 254, 0.3);
-      margin-top: 8px;
-    }
-
-    .btn-register:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(105, 92, 254, 0.4);
-    }
-
-    .btn-register:active {
-      transform: translateY(0);
-    }
-
-    .login-link {
-      text-align: center;
-      margin-top: 24px;
-      font-size: 14px;
-      color: var(--color-text-placeholder);
-    }
-
-    .login-link a {
-      color: var(--color-hover-primary);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-
-    .login-link a:hover {
-      color: #5648e8;
-    }
-
-    .error-message {
-      background-color: #fee2e2;
-      border: 1px solid #fecaca;
-      color: #991b1b;
-      padding: 12px 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      margin-bottom: 20px;
-      display: none;
-    }
-
-    .error-message.show {
-      display: block;
-      animation: shake 0.4s ease;
-    }
-
-    .success-message {
-      background-color: #d1fae5;
-      border: 1px solid #a7f3d0;
-      color: #065f46;
-      padding: 12px 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      margin-bottom: 20px;
-      display: none;
-    }
-
-    .success-message.show {
-      display: block;
-      animation: fadeIn 0.4s ease;
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-8px); }
-      75% { transform: translateX(8px); }
-    }
-
-    .terms-checkbox {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-
-    .terms-checkbox input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      accent-color: var(--color-hover-primary);
-      margin-top: 2px;
-      flex-shrink: 0;
-    }
-
-    .terms-checkbox label {
-      font-size: 14px;
-      color: var(--color-text-primary);
-      cursor: pointer;
-      user-select: none;
-      line-height: 1.5;
-    }
-
-    .terms-checkbox a {
-      color: var(--color-hover-primary);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .terms-checkbox a:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 480px) {
-      .register-card {
-        padding: 32px 24px;
-      }
-
-      .register-title {
-        font-size: 24px;
-      }
-
-      .role-buttons {
-        grid-template-columns: 1fr;
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
 </head>
 <body>
+
+  <style>
+  .role-btn.active {
+    border: 2px solid #695cfe !important;
+    background: linear-gradient(135deg, #695cfe 0%, #8b7fff 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(105, 92, 254, 0.3) !important;
+  }
+  </style>
+
   <div class="register-container">
     <div class="register-card">
       <!-- Logo & Title -->
@@ -378,19 +42,19 @@
       <div class="role-selection">
         <label class="form-label">Chọn vai trò đăng ký</label>
         <div class="role-buttons">
-          <button type="button" class="role-btn" data-role="admin">
+          <button type="button" class="role-btn" data-role="admin" data-role-id="2">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
             </svg>
             <span>Admin</span>
           </button>
-          <button type="button" class="role-btn" data-role="instructor">
+          <button type="button" class="role-btn" data-role="instructor" data-role-id="1">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
             </svg>
             <span>Instructor</span>
           </button>
-          <button type="button" class="role-btn" data-role="student">
+          <button type="button" class="role-btn" data-role="student" data-role-id="0">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
             </svg>
@@ -400,7 +64,12 @@
       </div>
 
       <!-- Register Form -->
-      <form id="registerForm">
+      <form id="registerForm" method="POST" action="/auth/register">
+        @csrf
+        
+        <!-- INPUT ẨN ĐỂ GỬI ROLE -->
+        <input type="hidden" name="role" id="roleInput" value="">
+
         <!-- Full Name & Email -->
         <div class="form-row">
           <div class="form-group">
@@ -411,7 +80,8 @@
               </svg>
               <input 
                 type="text" 
-                id="fullname" 
+                id="fullname"
+                name="fullname"
                 class="form-input" 
                 placeholder="Nguyễn Văn A"
                 required
@@ -427,47 +97,36 @@
               </svg>
               <input 
                 type="email" 
-                id="email" 
+                id="email"
+                name="email"
                 class="form-input" 
                 placeholder="email@example.com"
                 required
               >
             </div>
+            @error('email')
+                <span style="color: red; font-size: 13px; margin-top: 5px; display: block;">
+                    {{ $message }}
+                </span>
+            @enderror
           </div>
         </div>
 
-        <!-- Phone & Username -->
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="phone">Số điện thoại</label>
-            <div class="input-wrapper">
-              <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-              </svg>
-              <input 
-                type="tel" 
-                id="phone" 
-                class="form-input" 
-                placeholder="0123456789"
-                required
-              >
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="username">Tên đăng nhập</label>
-            <div class="input-wrapper">
-              <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <input 
-                type="text" 
-                id="username" 
-                class="form-input" 
-                placeholder="username"
-                required
-              >
-            </div>
+        <!-- Username -->
+        <div class="form-group">
+          <label class="form-label" for="username">Tên đăng nhập</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <input 
+              type="text" 
+              id="username"
+              name="username"
+              class="form-input" 
+              placeholder="username"
+              required
+            >
           </div>
         </div>
 
@@ -480,7 +139,8 @@
             </svg>
             <input 
               type="password" 
-              id="password" 
+              id="password"
+              name="password"
               class="form-input" 
               placeholder="••••••••"
               required
@@ -503,7 +163,8 @@
             </svg>
             <input 
               type="password" 
-              id="confirmPassword" 
+              id="confirmPassword"
+              name="password_confirmation"
               class="form-input" 
               placeholder="••••••••"
               required
@@ -517,7 +178,6 @@
           </div>
         </div>
 
-
         <!-- Register Button -->
         <button type="submit" class="btn-register">Đăng ký</button>
       </form>
@@ -530,16 +190,20 @@
   </div>
 
   <script>
-    // Role selection
+    // Khai báo biến selectedRole
     let selectedRole = null;
+    
+    // Role selection
     const roleBtns = document.querySelectorAll('.role-btn');
+    const roleInput = document.getElementById('roleInput');
 
     roleBtns.forEach(btn => {
       btn.addEventListener('click', function() {
         roleBtns.forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         selectedRole = this.dataset.role;
-        console.log('Selected role:', selectedRole);
+        roleInput.value = this.dataset.roleId;
+        console.log('Role selected:', selectedRole, 'ID:', roleInput.value);
       });
     });
 
@@ -547,7 +211,6 @@
     const togglePassword = document.getElementById('togglePassword');
     const passwordInput = document.getElementById('password');
     const eyeIcon = document.getElementById('eyeIcon');
-
     togglePassword.addEventListener('click', function() {
       const type = passwordInput.type === 'password' ? 'text' : 'password';
       passwordInput.type = type;
@@ -564,7 +227,6 @@
       }
     });
 
-    // Toggle confirm password visibility
     const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
     const confirmPasswordInput = document.getElementById('confirmPassword');
     const eyeIcon2 = document.getElementById('eyeIcon2');
@@ -591,10 +253,10 @@
     const successMessage = document.getElementById('successMessage');
 
     registerForm.addEventListener('submit', function(e) {
-      e.preventDefault();
+      e.preventDefault(); // Chặn submit tạm thời để validate
       
       // Check if role is selected
-      if (!selectedRole) {
+      if (!selectedRole || !roleInput.value) {
         errorMessage.textContent = 'Vui lòng chọn vai trò đăng ký!';
         errorMessage.classList.add('show');
         setTimeout(() => {
@@ -604,13 +266,8 @@
       }
 
       // Get form values
-      const fullname = document.getElementById('fullname').value;
-      const email = document.getElementById('email').value;
-      const phone = document.getElementById('phone').value;
-      const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
       const confirmPassword = document.getElementById('confirmPassword').value;
-      const termsAccepted = document.getElementById('terms').checked;
 
       // Validation
       if (password !== confirmPassword) {
@@ -631,27 +288,10 @@
         return;
       }
 
-      if (!termsAccepted) {
-        errorMessage.textContent = 'Vui lòng đồng ý với điều khoản dịch vụ!';
-        errorMessage.classList.add('show');
-        setTimeout(() => {
-          errorMessage.classList.remove('show');
-        }, 3000);
-        return;
-      }
-
-      // Success
-      successMessage.classList.add('show');
-      console.log('Registration data:', {
-        fullname,
-        email,
-        phone,
-        username,
-        password,
-        role: selectedRole
-      });
-
-      // Redirect after 2 seconds
-      setTimeout(() => {
-        alert(`Đăng ký thành công với vai trò: ${selectedRole}`);
-        // window.location.
+      // Nếu tất cả validation pass, submit form thật
+      console.log('Submitting form with role:', roleInput.value);
+      this.submit(); // Submit form
+    });
+  </script>
+</body>
+</html>

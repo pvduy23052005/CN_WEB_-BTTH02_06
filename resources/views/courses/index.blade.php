@@ -6,7 +6,6 @@
 @section('main-content')
     <div class="container my-5">
         <h1 class="mb-4 text-center text-primary">Khám phá Khóa học Online</h1>
-
         {{-- Form Tìm kiếm và Lọc --}}
         <div class="row mb-5 justify-content-center">
             <div class="col-lg-10">
@@ -54,7 +53,7 @@
                     <div class="card h-100 shadow-sm border-0 transition-300">
                         {{-- Hiển thị Hình ảnh khóa học --}}
                         @if ($course->image)
-                            <img src="{{ asset('assets/uploads/courses/' . $course->image) }}" class="card-img-top course-image-sm" alt="{{ $course->title }}">
+                          <img src="{{ $course->image ? asset($course->image) : 'https://placehold.co/60x40?text=No+Img' }}" class="course-thumb" alt="Course Img">
                         @else
                             <div class="course-image-sm bg-light text-center p-5 text-muted">
                                 [Hình ảnh minh họa]

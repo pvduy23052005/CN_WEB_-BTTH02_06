@@ -1,30 +1,20 @@
-
-
 <?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-// [get] /auth/login
-Route::get(
-  '/login',
-  [AuthController::class, "login"]
-);
+// Prefix: /auth, Name: auth.*
+// Không cần middleware auth vì đây là trang đăng nhập/đăng ký
 
-// [post] /auth/login
-Route::post(
-  "/login" ,
-  [AuthController::class , "loginPost"]
-);
+// /auth/login -> auth.login
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'loginPost1'])->name('login.post');
 
-// [get] /auth/register
-Route::get(
-  '/register',
-  [AuthController::class, "register"]
-);
 
-// [post] /auth/logout
-Route::post(
-    '/logout',
-    [AuthController::class, "logout"] 
-)->name('logout');
+// /auth/register -> auth.register
+Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'registerPost'])->name('register.post');
+
+// /auth/logout -> auth.logout (cần đăng nhập)
+// Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
