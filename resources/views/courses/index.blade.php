@@ -5,15 +5,15 @@
 
 @section('main-content')
     <div class="container my-5">
+        {{-- Tiêu đề và Form Tìm kiếm (Đã được khôi phục) --}}
         <h1 class="mb-4 text-center text-primary">Khám phá Khóa học Online</h1>
-        {{-- Form Tìm kiếm và Lọc --}}
+        
         <div class="row mb-5 justify-content-center">
             <div class="col-lg-10">
                 <form method="GET" action="{{ route('student.courses.index') }}" class="row g-3 align-items-center bg-light p-3 rounded shadow-sm">
                     {{-- Trường tìm kiếm --}}
                     <div class="col-md-5">
                         <label for="searchInput" class="visually-hidden">Tìm kiếm</label>
-                        {{-- SỬA LỖI: Dùng $search (đã truyền từ Controller) --}}
                         <input type="text" name="search" id="searchInput" class="form-control" placeholder="Tìm kiếm theo tên khóa học..." value="{{ $search ?? '' }}">
                     </div>
                     
@@ -22,10 +22,7 @@
                         <label for="categorySelect" class="visually-hidden">Danh mục</label>
                         <select name="category" id="categorySelect" class="form-select">
                             <option value="">Tất cả Danh mục</option>
-                            
-                            {{-- LỖI ĐÃ KHẮC PHỤC: $categories giờ đã được Controller truyền vào --}}
                             @foreach ($categories as $category) 
-                                {{-- SỬA LỖI: Dùng $selected_category (đã truyền từ Controller) --}}
                                 <option value="{{ $category->id }}" {{ ($selected_category ?? '') == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
@@ -51,9 +48,14 @@
             @forelse ($courses as $course)
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100 shadow-sm border-0 transition-300">
-                        {{-- Hiển thị Hình ảnh khóa học --}}
+                        
+                        {{-- SỬA LỖI HIỂN THỊ HÌNH ẢNH --}}
                         @if ($course->image)
-                          <img src="{{ $course->image ? asset($course->image) : 'https://placehold.co/60x40?text=No+Img' }}" class="course-thumb" alt="Course Img">
+                            {{-- Giả định: $course->image chỉ chứa tên file (ví dụ: 'image.jpg') --}}
+                            {{-- Và file được lưu trong thư mục public/assets/uploads/courses/ --}}
+                            <img src="{{ asset('assets/uploads/courses/' . $course->image) }}" 
+                                 class="card-img-top course-image-sm" 
+                                 alt="{{ $course->title }}">
                         @else
                             <div class="course-image-sm bg-light text-center p-5 text-muted">
                                 [Hình ảnh minh họa]
@@ -65,10 +67,8 @@
                             
                             {{-- Thông tin phụ --}}
                             <div class="mb-2">
-                                {{-- Giả định đã Eager Load 'category' --}}
                                 <span class="badge bg-primary text-white me-2">{{ $course->category->name ?? 'Không rõ' }}</span>
                                 <span class="text-muted small">
-                                    {{-- Giả định đã Eager Load 'instructor' --}}
                                     <i class="fas fa-user-tie"></i> GV: {{ $course->instructor->fullname ?? 'N/A' }} 
                                 </span>
                             </div>

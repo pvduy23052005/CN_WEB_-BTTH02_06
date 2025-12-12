@@ -3,7 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 
-// 1. Hiển thị danh sách
+
+
+// Route::middleware(['auth', 'role:0'])->group(function ()
+Route::middleware(['auth', 'role:1'])->group(function () {
+    
+    // 1. Hiển thị danh sách
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 
 // 2. Hiển thị form thêm mới (phải đặt trước route có {id} để tránh lỗi)
@@ -20,3 +25,5 @@ Route::put('/courses/{id}', [CourseController::class, 'update'])->name('courses.
 
 // 6. Xử lý xóa (Method DELETE)
 Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
+    
+});

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // <-- CẦN THÊM DÒNG NÀY ĐỂ DÙNG Auth::attempt
+use Illuminate\Support\Facades\Auth; 
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -40,7 +40,7 @@ class AuthController extends Controller
 
       if ($user->role == 1) {
         // Giảng viên: Chuyển hướng đến Dashboard giảng viên (admin/dashboard)
-        return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
+        return redirect('instructor/courses')->with('success', 'Đăng nhập thành công!');
       }
 
       if ($user->role == 2) {
@@ -97,5 +97,20 @@ class AuthController extends Controller
 
     return redirect('/auth/login')->with('success', 'Đăng ký thành công!');
   }
+
+  public function logout(Request $request)
+{
+    // Đăng xuất người dùng hiện tại
+    Auth::logout();
+
+    // Hủy session của người dùng
+    $request->session()->invalidate();
+
+    // Tái tạo token CSRF mới
+    $request->session()->regenerateToken();
+
+    // Chuyển hướng người dùng về trang đăng nhập hoặc trang chủ
+    return redirect('/auth/login')->with('success', 'Bạn đã đăng xuất thành công.');
+}
 }
 

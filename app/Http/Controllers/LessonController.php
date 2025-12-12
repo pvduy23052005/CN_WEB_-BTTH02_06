@@ -10,8 +10,7 @@ use Illuminate\Support\Facades\Gate; // Có thể dùng Gate/Policy để bảo 
 use App\Models\LessonCompletion;
 class LessonController extends Controller
 {
-    // Chức năng 6: Xem bài học và tài liệu
-    // Route: /student/learn/{lessonId} -> student.learn
+    
     public function showLesson($lessonId)
 
     {

@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Route;
 
 
 // Bổ sung middleware 'role:0'
+Route::get('/', function () {
+    // Chuyển hướng người dùng thẳng đến Route Đăng nhập
+    return redirect()->route('auth.login');
+});
 Route::middleware(['auth', 'role:0'])->prefix('student')->group(base_path('routes/student.php'));
 
 // Định nghĩa nhóm route cho Giảng viên (Instructor - Role 1)
